@@ -6,9 +6,10 @@ import {
   getStoreBySlug,
   removeFreshProduct,
 } from "../services/stores";
+import { getOrders } from "../services/orders";
 
 function Admin() {
-  const { freshToday } = useLoaderData();
+  const { freshToday, orders } = useLoaderData();
 
   return (
     <div>
@@ -41,6 +42,32 @@ function Admin() {
           </ul>
         )}
       </section>
+
+      <section>
+        <h2>Pedidos atuais</h2>
+        {orders.length < 1 ? (
+          <p>Nenhum pedido ainda.</p>
+        ) : (
+          <ul>
+            {orders.map(order => (
+              <li key={order.id}>
+                <h3>{order.date.toString()}</h3>
+                <p>
+                  <strong>De: {order.name}</strong>
+                </p>
+                <ul>
+                  {order.basket.products.map(product => (
+                    <li>
+                      {product.name} ({product.quantity})
+                    </li>
+                  ))}
+                </ul>
+                <p>Total: {order.basket.total}</p>
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
     </div>
   );
 }
@@ -48,8 +75,9 @@ function Admin() {
 export default Admin;
 
 export async function loader() {
+  const orders = await getOrders();
   const { freshToday } = await getStoreBySlug("horta-123");
-  return { freshToday };
+  return { freshToday, orders };
 }
 
 export async function action({ request }) {
