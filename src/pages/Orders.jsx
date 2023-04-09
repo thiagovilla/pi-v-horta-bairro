@@ -48,7 +48,7 @@ function Orders() {
 export default Orders;
 
 export async function loader() {
-  const orders = await getOrders();
+  const orders = (await getOrders()).filter(o => !o.fulfilled);
   return { orders };
 }
 
