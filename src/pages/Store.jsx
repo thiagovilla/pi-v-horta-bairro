@@ -1,7 +1,8 @@
 import React from "react";
-import { useLoaderData } from "react-router-dom";
+import { Form, useLoaderData } from "react-router-dom";
 
 import { getStoreBySlug } from "../services/stores";
+import { addToBasket } from "../services/basket";
 
 function Store() {
   const { store } = useLoaderData();
@@ -9,7 +10,10 @@ function Store() {
   return (
     <div>
       <h1>{store.name}</h1>
-      <FreshToday products={store.freshToday} />
+      <Form method="post">
+        <FreshToday products={store.freshToday} />
+        <button type="submit">Adicionar à cesta</button>
+      </Form>
     </div>
   );
 }
@@ -18,8 +22,11 @@ function FreshToday(props) {
   if (props.products.length < 1) return <div>Sem produtos frescos hoje.</div>;
 
   const listItems = props.products.map(product => (
-    <li>
-      {product.name} - {product.price}
+    <li key={product.id}>
+      <label>
+        <input type="checkbox" name="products" value={product.id} />
+        {product.name} - {product.price}
+      </label>
     </li>
   ));
 
@@ -31,4 +38,11 @@ export default Store;
 export async function loader({ params }) {
   const store = await getStoreBySlug(params.slug);
   return { store };
+}
+
+export async function action({ request }) {
+  const formData = await request.formData();
+  const products = formData.getAll("products");
+  const basket = await addToBasket(products);
+  return { basket };
 }

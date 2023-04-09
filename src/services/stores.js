@@ -7,7 +7,10 @@ const stores = [
   {
     slug: "horta-123",
     name: "Horta 123",
-    freshToday: [{ name: "Alface", price: 3.5 }],
+    freshToday: [
+      { id: "alface", name: "Alface", price: 3.5 },
+      { id: "couve", name: "Couve", price: 3 },
+    ],
   },
 ];
 
