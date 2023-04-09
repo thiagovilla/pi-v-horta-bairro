@@ -6,7 +6,7 @@ import {
   getStoreBySlug,
   removeFreshProduct,
 } from "../services/stores";
-import { getOrders } from "../services/orders";
+import { cancelOrder, getOrders } from "../services/orders";
 
 function Admin() {
   const { freshToday, orders } = useLoaderData();
@@ -50,19 +50,33 @@ function Admin() {
         ) : (
           <ul>
             {orders.map(order => (
-              <li key={order.id}>
+              <li
+                key={order.id}
+                style={
+                  order.canceled
+                    ? { color: "gray", textDecoration: "line-through" }
+                    : {}
+                }
+              >
                 <h3>{order.date.toString()}</h3>
                 <p>
                   <strong>De: {order.name}</strong>
                 </p>
                 <ul>
                   {order.basket.products.map(product => (
-                    <li>
+                    <li key={product.id}>
                       {product.name} ({product.quantity})
                     </li>
                   ))}
                 </ul>
                 <p>Total: {order.basket.total}</p>
+                <Form method="patch">
+                  <input type="hidden" name="id" value={order.id} />
+                  <input type="hidden" name="action" value="cancel" />
+                  <button type="submit" disabled={order.canceled}>
+                    Cancelar
+                  </button>
+                </Form>
               </li>
             ))}
           </ul>
@@ -88,6 +102,8 @@ export async function action({ request }) {
     return addFreshProduct("xyz", product);
   } else if (request.method === "DELETE") {
     return removeFreshProduct("xyz", +formData.get("id"));
+  } else if (request.method === "PATCH") {
+    return cancelOrder(+formData.get("id"));
   } else {
     throw Error("ERR_UNKNOWN_METHOD");
   }

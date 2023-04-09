@@ -1,6 +1,20 @@
 import { clearBasket } from "./basket";
 
-const orders = [];
+const orders = [
+  {
+    id: 123,
+    date: new Date(),
+    name: "Maria",
+    canceled: false,
+    basket: {
+      products: [
+        { id: "alface", name: "Alface", price: 3.5, quantity: 1 },
+        { id: "couve", name: "Couve", price: 3, quantity: 1 },
+      ],
+      total: 6.5,
+    },
+  },
+];
 
 export async function getOrders() {
   return Promise.resolve(orders);
