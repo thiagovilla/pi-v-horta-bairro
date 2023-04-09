@@ -29,7 +29,7 @@ export async function clearBasket() {
 
 function updateOrderTotal() {
   basket.total = basket.products.reduce(
-    (total, product) => product.price * product.quantity,
+    (total, product) => total + product.price * product.quantity,
     0
   );
 }
