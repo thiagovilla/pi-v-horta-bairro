@@ -16,6 +16,7 @@ function TopBar() {
           <Link to="/pedidos">Pedidos</Link>
         </li>
       </ul>
+      <Link to="/admin">Admin</Link>
     </div>
   );
 }

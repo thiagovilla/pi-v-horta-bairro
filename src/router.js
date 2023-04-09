@@ -14,6 +14,10 @@ import Orders, {
   action as ordersAction,
 } from "./pages/Orders";
 import Stores, { loader as storesLoader } from "./pages/Stores";
+import Admin, {
+  loader as adminLoader,
+  action as adminAction,
+} from "./pages/Admin";
 
 const router = createBrowserRouter([
   {
@@ -42,6 +46,12 @@ const router = createBrowserRouter([
         Component: Orders,
         loader: ordersLoader,
         action: ordersAction,
+      },
+      {
+        path: "/admin",
+        Component: Admin,
+        loader: adminLoader,
+        action: adminAction,
       },
     ],
   },
