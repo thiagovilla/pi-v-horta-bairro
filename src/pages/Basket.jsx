@@ -2,6 +2,7 @@ import React from "react";
 import { Form, useLoaderData } from "react-router-dom";
 
 import { getBasket, updateBasketQuantities } from "../services/basket";
+import { createOrder } from "../services/orders";
 
 function Basket() {
   const { basket } = useLoaderData();
@@ -27,9 +28,16 @@ function Basket() {
   return (
     <div>
       <h1>Cesta</h1>
-      <Form method="post">
+      <Form method="patch">
         <ul>{listItems}</ul>
         <button type="submit">Atualizar quantidades</button>
+      </Form>
+      <Form method="post">
+        <label>
+          Nome: <input type="text" name="name" required />
+        </label>
+        <input type="hidden" name="basket" value={JSON.stringify(basket)} />
+        <button type="submit">Reservar pedido</button>
       </Form>
       <p>Total: {basket.total}</p>
     </div>
@@ -45,7 +53,16 @@ export async function loader() {
 
 export async function action({ request }) {
   const formData = await request.formData();
-  const prodQtyMap = Object.fromEntries(formData);
-  const basket = await updateBasketQuantities(prodQtyMap);
-  return { basket };
+  if (request.method === "PATCH") {
+    const prodQtyMap = Object.fromEntries(formData);
+    const basket = await updateBasketQuantities(prodQtyMap);
+    return { basket };
+  } else if (request.method === "POST") {
+    const order = Object.fromEntries(formData);
+    order.basket = JSON.parse(order.basket);
+    const createdOrder = await createOrder(order);
+    return { createdOrder };
+  } else {
+    throw Error("ERR_UNKNOWN_METHOD");
+  }
 }
