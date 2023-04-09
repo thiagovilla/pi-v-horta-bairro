@@ -32,3 +32,12 @@ export async function addFreshProduct(storeId, product) {
   store.freshToday.push(product);
   return Promise.resolve(store);
 }
+
+export async function removeFreshProduct(storeId, productId) {
+  const store = stores.find(s => storeId === s.id);
+  if (!store) throw Error("ERR_STORE_NOT_FOUND");
+  const productIndex = store.freshToday.findIndex(p => productId === p.id);
+  if (!productIndex) throw Error("ERR_PRODUCT_NOT_FOUND");
+  store.freshToday.splice(productIndex, 1);
+  return Promise.resolve(store);
+}

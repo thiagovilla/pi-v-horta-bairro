@@ -1,7 +1,11 @@
 import React from "react";
 import { Form, useLoaderData } from "react-router-dom";
 
-import { addFreshProduct, getStoreBySlug } from "../services/stores";
+import {
+  addFreshProduct,
+  getStoreBySlug,
+  removeFreshProduct,
+} from "../services/stores";
 
 function Admin() {
   const { freshToday } = useLoaderData();
@@ -25,7 +29,13 @@ function Admin() {
           <ul>
             {freshToday.map(product => (
               <li key={product.id}>
-                {product.name} - {product.price}
+                <Form method="delete">
+                  <label>
+                    {product.name} - {product.price}
+                    <input type="hidden" name="id" value={product.id} />
+                    <button type="submit">Remover</button>
+                  </label>
+                </Form>
               </li>
             ))}
           </ul>
@@ -48,5 +58,9 @@ export async function action({ request }) {
     const product = Object.fromEntries(formData);
     product.id = +new Date();
     return addFreshProduct("xyz", product);
+  } else if (request.method === "DELETE") {
+    return removeFreshProduct("xyz", +formData.get("id"));
+  } else {
+    throw Error("ERR_UNKNOWN_METHOD");
   }
 }
