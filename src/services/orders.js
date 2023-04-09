@@ -1,3 +1,5 @@
+import { clearBasket } from "./basket";
+
 const orders = [];
 
 export async function getOrders() {
@@ -9,6 +11,7 @@ export async function createOrder(order) {
   order.id = +order.date;
   order.canceled = false;
   orders.push(order);
+  clearBasket();
   return Promise.resolve(order);
 }
 

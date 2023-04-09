@@ -22,3 +22,9 @@ export async function updateBasketQuantities(prodQtyMap) {
   );
   return Promise.resolve(basket);
 }
+
+export async function clearBasket() {
+  basket.products = [];
+  basket.total = 0;
+  return Promise.resolve(basket);
+}
