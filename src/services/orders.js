@@ -35,3 +35,10 @@ export async function cancelOrder(id) {
   order.canceled = true;
   return Promise.resolve(order);
 }
+
+export async function fulfillOrder(id) {
+  const order = orders.find(o => id === o.id);
+  if (!order) throw Error("ERR_ORDER_NOT_FOUND");
+  order.fulfilled = true;
+  return Promise.resolve(order);
+}

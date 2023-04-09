@@ -6,7 +6,7 @@ import {
   getStoreBySlug,
   removeFreshProduct,
 } from "../services/stores";
-import { cancelOrder, getOrders } from "../services/orders";
+import { cancelOrder, getOrders, fulfillOrder } from "../services/orders";
 
 function Admin() {
   const { freshToday, orders } = useLoaderData();
@@ -49,36 +49,48 @@ function Admin() {
           <p>Nenhum pedido ainda.</p>
         ) : (
           <ul>
-            {orders.map(order => (
-              <li
-                key={order.id}
-                style={
-                  order.canceled
-                    ? { color: "gray", textDecoration: "line-through" }
-                    : {}
-                }
-              >
-                <h3>{order.date.toString()}</h3>
-                <p>
-                  <strong>De: {order.name}</strong>
-                </p>
-                <ul>
-                  {order.basket.products.map(product => (
-                    <li key={product.id}>
-                      {product.name} ({product.quantity})
-                    </li>
-                  ))}
-                </ul>
-                <p>Total: {order.basket.total}</p>
-                <Form method="patch">
-                  <input type="hidden" name="id" value={order.id} />
-                  <input type="hidden" name="action" value="cancel" />
-                  <button type="submit" disabled={order.canceled}>
-                    Cancelar
-                  </button>
-                </Form>
-              </li>
-            ))}
+            {orders.map(order => {
+              let style = {};
+              if (order.canceled) {
+                style = { color: "gray", textDecoration: "line-through" };
+              } else if (order.fulfilled) {
+                style = { color: "green", backgroundColor: "palegreen" };
+              }
+
+              return (
+                <li key={order.id} style={style}>
+                  <h3>{order.date.toString()}</h3>
+                  <p>
+                    <strong>De: {order.name}</strong>
+                  </p>
+                  <ul>
+                    {order.basket.products.map(product => (
+                      <li key={product.id}>
+                        {product.name} ({product.quantity})
+                      </li>
+                    ))}
+                  </ul>
+                  <p>Total: {order.basket.total}</p>
+                  <Form method="patch">
+                    <input type="hidden" name="id" value={order.id} />
+                    <input type="hidden" name="action" value="cancel" />
+                    <button
+                      type="submit"
+                      disabled={order.canceled || order.fulfilled}
+                    >
+                      Cancelar
+                    </button>
+                  </Form>
+                  <Form method="patch">
+                    <input type="hidden" name="id" value={order.id} />
+                    <input type="hidden" name="action" value="fulfill" />
+                    <button type="submit" disabled={order.fulfilled}>
+                      <strong>Concluir</strong>
+                    </button>
+                  </Form>
+                </li>
+              );
+            })}
           </ul>
         )}
       </section>
@@ -103,7 +115,11 @@ export async function action({ request }) {
   } else if (request.method === "DELETE") {
     return removeFreshProduct("xyz", +formData.get("id"));
   } else if (request.method === "PATCH") {
-    return cancelOrder(+formData.get("id"));
+    if (formData.get("action") === "cancle") {
+      return cancelOrder(+formData.get("id"));
+    } else {
+      return fulfillOrder(+formData.get("id"));
+    }
   } else {
     throw Error("ERR_UNKNOWN_METHOD");
   }
