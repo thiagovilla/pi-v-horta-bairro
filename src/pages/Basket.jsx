@@ -1,5 +1,5 @@
 import React from "react";
-import { Form, useLoaderData } from "react-router-dom";
+import { Form, redirect, useLoaderData } from "react-router-dom";
 
 import { getBasket, updateBasketQuantities } from "../services/basket";
 import { createOrder } from "../services/orders";
@@ -60,8 +60,8 @@ export async function action({ request }) {
   } else if (request.method === "POST") {
     const order = Object.fromEntries(formData);
     order.basket = JSON.parse(order.basket);
-    const createdOrder = await createOrder(order);
-    return { createdOrder };
+    await createOrder(order);
+    return redirect("/pedidos");
   } else {
     throw Error("ERR_UNKNOWN_METHOD");
   }

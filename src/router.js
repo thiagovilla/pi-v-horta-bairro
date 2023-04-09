@@ -7,6 +7,7 @@ import Store, {
   action as storeAction,
   loader as storeLoader,
 } from "./pages/Store";
+import Orders, { loader as ordersLoader } from "./pages/Orders";
 
 const router = createBrowserRouter([
   {
@@ -20,6 +21,11 @@ const router = createBrowserRouter([
     Component: Basket,
     loader: basketLoader,
     action: basketAction,
+  },
+  {
+    path: "/pedidos",
+    Component: Orders,
+    loader: ordersLoader,
   },
 ]);
 
