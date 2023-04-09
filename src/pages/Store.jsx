@@ -10,16 +10,14 @@ function Store() {
   return (
     <div>
       <h1>{store.name}</h1>
-      <Form method="post">
-        <FreshToday products={store.freshToday} />
-        <button type="submit">Adicionar à cesta</button>
-      </Form>
+      <FreshToday products={store.freshToday} />
     </div>
   );
 }
 
 function FreshToday(props) {
-  if (props.products.length < 1) return <div>Sem produtos frescos hoje.</div>;
+  if (props.products.length < 1)
+    return <div>Nenhum produto fresco por enquanto.</div>;
 
   const listItems = props.products.map(product => (
     <li key={product.id}>
@@ -34,7 +32,12 @@ function FreshToday(props) {
     </li>
   ));
 
-  return <ul>{listItems}</ul>;
+  return (
+    <Form method="post">
+      <ul>{listItems}</ul>
+      <button type="submit">Adicionar à cesta</button>
+    </Form>
+  );
 }
 
 export default Store;

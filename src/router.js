@@ -11,10 +11,16 @@ import Orders, {
   loader as ordersLoader,
   action as ordersAction,
 } from "./pages/Orders";
+import Stores, { loader as storesLoader } from "./pages/Stores";
 
 const router = createBrowserRouter([
   {
-    path: "/horta/:slug",
+    path: "/hortas",
+    Component: Stores,
+    loader: storesLoader,
+  },
+  {
+    path: "/hortas/:slug",
     Component: Store,
     loader: storeLoader,
     action: storeAction,
