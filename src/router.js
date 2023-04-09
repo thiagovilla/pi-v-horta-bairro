@@ -1,10 +1,11 @@
 import { createBrowserRouter } from "react-router-dom";
-import Store from "./pages/Store";
+import Store, { loader as storeLoader } from "./pages/Store";
 
 const router = createBrowserRouter([
   {
     path: "/horta/:slug",
     Component: Store,
+    loader: storeLoader,
   },
 ]);
 
