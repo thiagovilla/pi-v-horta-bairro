@@ -18,7 +18,11 @@ function Orders() {
         }
       >
         <h2>{order.date.toString()}</h2>
-        <p>{order.basket.products.map(p => p.name).join(", ")}</p>
+        <p>
+          {order.basket.products
+            .map(p => p.name + ` (${p.quantity})`)
+            .join(", ")}
+        </p>
         <p>Total: {order.basket.total}</p>
         <p>
           <strong>Nome: {order.name}</strong>
