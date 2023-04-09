@@ -1,7 +1,7 @@
 import React from "react";
-import { useLoaderData } from "react-router-dom";
+import { Form, useLoaderData } from "react-router-dom";
 
-import { getBasket } from "../services/basket";
+import { getBasket, updateBasketQuantities } from "../services/basket";
 
 function Basket() {
   const { basket } = useLoaderData();
@@ -14,8 +14,8 @@ function Basket() {
       <label>
         <input
           type="number"
-          name={product.name}
-          value={product.quantity}
+          name={product.id}
+          defaultValue={product.quantity}
           step={1}
           min={0}
         />
@@ -27,7 +27,10 @@ function Basket() {
   return (
     <div>
       <h1>Cesta</h1>
-      <ul>{listItems}</ul>
+      <Form method="post">
+        <ul>{listItems}</ul>
+        <button type="submit">Atualizar quantidades</button>
+      </Form>
       <p>Total: {basket.total}</p>
     </div>
   );
@@ -37,5 +40,12 @@ export default Basket;
 
 export async function loader() {
   const basket = await getBasket();
+  return { basket };
+}
+
+export async function action({ request }) {
+  const formData = await request.formData();
+  const prodQtyMap = Object.fromEntries(formData);
+  const basket = await updateBasketQuantities(prodQtyMap);
   return { basket };
 }

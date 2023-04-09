@@ -15,3 +15,10 @@ export async function addToBasket(products) {
   );
   return Promise.resolve(basket);
 }
+
+export async function updateBasketQuantities(prodQtyMap) {
+  basket.products.forEach(
+    product => (product.quantity = prodQtyMap[product.id])
+  );
+  return Promise.resolve(basket);
+}
