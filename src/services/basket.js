@@ -9,6 +9,9 @@ export async function getBasket() {
 
 export async function addToBasket(products) {
   basket.products.push(...products);
-  basket.total += products.reduce((total, product) => total + product.price, 0);
+  basket.total += products.reduce(
+    (total, product) => total + product.price * product.quantity,
+    0
+  );
   return Promise.resolve(basket);
 }

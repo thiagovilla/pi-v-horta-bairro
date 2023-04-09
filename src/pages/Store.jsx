@@ -47,6 +47,7 @@ export async function loader({ params }) {
 export async function action({ request }) {
   const formData = await request.formData();
   const products = formData.getAll("products").map(JSON.parse);
+  products.forEach(product => (product.quantity = 1));
   await addToBasket(products);
   return redirect("/cesta");
 }

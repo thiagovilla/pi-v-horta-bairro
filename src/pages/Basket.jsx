@@ -10,7 +10,18 @@ function Basket() {
     return <div>Cesta vazia. Adicione alguns itens.</div>;
 
   const listItems = basket.products.map(product => (
-    <li key={product.id}>{product.name}</li>
+    <li key={product.id}>
+      <label>
+        <input
+          type="number"
+          name={product.name}
+          value={product.quantity}
+          step={1}
+          min={0}
+        />
+        {product.name}
+      </label>
+    </li>
   ));
 
   return (
