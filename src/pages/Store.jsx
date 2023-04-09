@@ -24,7 +24,11 @@ function FreshToday(props) {
   const listItems = props.products.map(product => (
     <li key={product.id}>
       <label>
-        <input type="checkbox" name="products" value={product.id} />
+        <input
+          type="checkbox"
+          name="products"
+          value={JSON.stringify(product)}
+        />
         {product.name} - {product.price}
       </label>
     </li>
@@ -42,7 +46,7 @@ export async function loader({ params }) {
 
 export async function action({ request }) {
   const formData = await request.formData();
-  const products = formData.getAll("products");
+  const products = formData.getAll("products").map(JSON.parse);
   const basket = await addToBasket(products);
   return { basket };
 }

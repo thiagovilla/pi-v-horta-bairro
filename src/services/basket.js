@@ -1,6 +1,10 @@
-const basket = [];
+const basket = {
+  products: [],
+  total: 0,
+};
 
 export async function addToBasket(products) {
-  basket.push(...products);
+  basket.products.push(...products);
+  basket.total += products.reduce((total, product) => total + product.price, 0);
   return Promise.resolve(basket);
 }
