@@ -6,6 +6,15 @@ export async function getOrders() {
 
 export async function createOrder(order) {
   order.date = new Date();
+  order.id = +order.date;
+  order.canceled = false;
   orders.push(order);
+  return Promise.resolve(order);
+}
+
+export async function cancelOrder(id) {
+  const order = orders.find(o => id === o.id);
+  if (!order) throw Error("ERR_ORDER_NOT_FOUND");
+  order.canceled = true;
   return Promise.resolve(order);
 }
