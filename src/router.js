@@ -1,4 +1,5 @@
 import { createBrowserRouter } from "react-router-dom";
+import Basket, { loader as basketLoader } from "./pages/Basket";
 import Store, {
   action as storeAction,
   loader as storeLoader,
@@ -10,6 +11,11 @@ const router = createBrowserRouter([
     Component: Store,
     loader: storeLoader,
     action: storeAction,
+  },
+  {
+    path: "/cesta",
+    Component: Basket,
+    loader: basketLoader,
   },
 ]);
 

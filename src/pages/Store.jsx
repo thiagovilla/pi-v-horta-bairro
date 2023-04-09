@@ -1,5 +1,5 @@
 import React from "react";
-import { Form, useLoaderData } from "react-router-dom";
+import { Form, redirect, useLoaderData } from "react-router-dom";
 
 import { getStoreBySlug } from "../services/stores";
 import { addToBasket } from "../services/basket";
@@ -47,6 +47,6 @@ export async function loader({ params }) {
 export async function action({ request }) {
   const formData = await request.formData();
   const products = formData.getAll("products").map(JSON.parse);
-  const basket = await addToBasket(products);
-  return { basket };
+  await addToBasket(products);
+  return redirect("/cesta");
 }
