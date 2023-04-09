@@ -1,4 +1,6 @@
 import { createBrowserRouter } from "react-router-dom";
+
+import Root from "./pages/Root";
 import Basket, {
   action as basketAction,
   loader as basketLoader,
@@ -15,27 +17,33 @@ import Stores, { loader as storesLoader } from "./pages/Stores";
 
 const router = createBrowserRouter([
   {
-    path: "/hortas",
-    Component: Stores,
-    loader: storesLoader,
-  },
-  {
-    path: "/hortas/:slug",
-    Component: Store,
-    loader: storeLoader,
-    action: storeAction,
-  },
-  {
-    path: "/cesta",
-    Component: Basket,
-    loader: basketLoader,
-    action: basketAction,
-  },
-  {
-    path: "/pedidos",
-    Component: Orders,
-    loader: ordersLoader,
-    action: ordersAction,
+    path: "/",
+    Component: Root,
+    children: [
+      {
+        path: "/hortas",
+        Component: Stores,
+        loader: storesLoader,
+      },
+      {
+        path: "/hortas/:slug",
+        Component: Store,
+        loader: storeLoader,
+        action: storeAction,
+      },
+      {
+        path: "/cesta",
+        Component: Basket,
+        loader: basketLoader,
+        action: basketAction,
+      },
+      {
+        path: "/pedidos",
+        Component: Orders,
+        loader: ordersLoader,
+        action: ordersAction,
+      },
+    ],
   },
 ]);
 
